@@ -2,19 +2,31 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { User } from './user.entity';
+import { Role } from './role.entity';
 
-@Entity({ name: 'roles' })
-export class Role {
+@Entity({ name: 'users' })
+export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ nullable: false, type: 'varchar' })
   name: string;
+
+  @Column({ nullable: false, type: 'varchar', unique: true })
+  email: string;
+
+  @Column({ nullable: false, type: 'varchar' })
+  password: string;
+
+  @Column({ nullable: false, type: 'int', name: 'role_id' })
+  roleId: number;
+
+  @Column({ nullable: true, type: 'varchar', name: 'refresh_token' })
+  refreshToken?: string;
 
   @CreateDateColumn({
     name: 'created_at',
@@ -31,6 +43,6 @@ export class Role {
   })
   updatedAt: Date;
 
-  @OneToMany(() => User, (user) => user.role)
-  users: User[];
+  @ManyToOne(() => Role, (role) => role.users)
+  role: Role;
 }

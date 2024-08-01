@@ -10,6 +10,7 @@ export class CreateTableRoles1722504983624 implements MigrationInterface {
             name: 'id',
             type: 'int',
             isPrimary: true,
+            isGenerated: true,
           },
           {
             name: 'name',
@@ -36,6 +37,6 @@ export class CreateTableRoles1722504983624 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('roles');   
+    await queryRunner.dropTable('roles', true);
   }
 }
