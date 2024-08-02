@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Order } from './order.entity';
+import { PaymentType } from './../enums/paymentType.enum';
 
 @Entity({ name: 'payments' })
 export class Payment {
@@ -16,8 +17,8 @@ export class Payment {
   @Column({ type: 'varchar', nullable: false })
   name: string;
 
-  @Column({ type: 'varchar', nullable: false })
-  type: string;
+  @Column({ type: 'enum', nullable: false, enum: PaymentType })
+  type: PaymentType;
 
   @Column({ type: 'varchar', nullable: true })
   logo?: string;

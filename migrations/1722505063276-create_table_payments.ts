@@ -19,8 +19,9 @@ export class CreateTablePayments1722505063276 implements MigrationInterface {
           },
           {
             name: 'type',
-            type: 'varchar',
+            type: 'enum',
             isNullable: false,
+            enum: ['Credit Card', 'Debit Card', 'Cash', 'E-Wallet'],
           },
           {
             name: 'logo',
