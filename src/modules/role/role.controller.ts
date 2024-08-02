@@ -10,14 +10,17 @@ import {
 } from '@nestjs/common';
 import { CreateRoleDto } from './dto/createRole.dto';
 import { UpdateRoleDto } from './dto/updateRole.dto';
+import { Role } from 'src/entities/role.entity';
+import { RoleService } from './role.service';
 
 @Controller('/roles')
 export class RoleController {
-  constructor() {}
+  constructor(private roleService: RoleService) {}
 
   @Post()
-  create(@Body() request: CreateRoleDto): string {
-    return 'create roles';
+  async create(@Body() request: CreateRoleDto): Promise<Role> {
+    const role = await this.roleService.create(request);
+    return role;
   }
 
   @Get('/:id')
