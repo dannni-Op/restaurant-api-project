@@ -2,9 +2,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Product } from './product.entity';
 
 @Entity({ name: 'categories' })
 export class Category {
@@ -28,4 +30,7 @@ export class Category {
     onUpdate: 'current_timestamp',
   })
   updatedAt: Date;
+
+  @OneToMany(() => Product, (product) => product.category)
+  products: Product[];
 }
