@@ -1,6 +1,4 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { config } from './config/database.config';
 import { ConfigModule } from '@nestjs/config';
@@ -8,6 +6,7 @@ import { WinstonModule } from 'nest-winston';
 import { winstonConfig } from './config/winston.config';
 import { CommonModule } from './common/common.module';
 import { LogMiddleware } from './middlewares/log.middleware';
+import { RoleModule } from './modules/role/role.module';
 
 @Module({
   imports: [
@@ -18,9 +17,10 @@ import { LogMiddleware } from './middlewares/log.middleware';
     }),
     WinstonModule.forRootAsync(winstonConfig),
     CommonModule,
+    RoleModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
