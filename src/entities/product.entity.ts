@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -28,9 +29,6 @@ export class Product {
   @Column({ type: 'varchar', nullable: true })
   image?: string;
 
-  @Column({ type: 'int', nullable: false, name: 'category_id' })
-  categoryId: number;
-
   @CreateDateColumn({
     name: 'created_at',
     type: 'timestamp',
@@ -47,5 +45,6 @@ export class Product {
   updatedAt: Date;
 
   @ManyToOne(() => Category, (category) => category.products)
+  @JoinColumn({ name: 'category_id' })
   category: Category;
 }

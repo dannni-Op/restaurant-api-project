@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from 'src/entities/category.entity';
 import { Repository } from 'typeorm';
 import { CreateCategoryDto } from './dto/createCategory.dto';
+import { UpdateCategoryDto } from './dto/updateCategory.dto';
 
 @Injectable()
 export class CategoryRepository {
@@ -18,7 +19,41 @@ export class CategoryRepository {
   }
 
   async findByName(name: string): Promise<Category | null> {
-    const category = await this.repository.findOneBy({ name });
-    return category;
+    const result = await this.repository.findOneBy({ name });
+    return result;
+  }
+
+  async findById(id: number): Promise<Category | null> {
+    const result = await this.repository.findOneBy({ id });
+    return result;
+  }
+
+  async findByIdWithRelations(id: number): Promise<Category | null> {
+    const result = await this.repository.findOne({
+      where: {
+        id,
+      },
+      relations: ['products'],
+    });
+    return result;
+  }
+
+  async getCategories(): Promise<Category[]> {
+    const result = await this.repository.find();
+    return result;
+  }
+
+  async updateCategory(
+    id: number,
+    request: UpdateCategoryDto,
+  ): Promise<Category> {
+    await this.repository.update({ id }, request);
+    const result = await this.findById(id);
+    return result;
+  }
+
+  async deleteCategory(id: number): Promise<boolean> {
+    await this.repository.delete({ id });
+    return true;
   }
 }
