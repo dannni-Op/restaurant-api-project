@@ -24,7 +24,7 @@ export class RoleController {
   }
 
   @Get('/:id')
-  async getRole(@Param('id', ParseIntPipe) id: number): Promise<Role> {
+  async get(@Param('id', ParseIntPipe) id: number): Promise<Role> {
     const role = await this.roleService.get(id);
     return role;
   }
@@ -40,6 +40,9 @@ export class RoleController {
     @Param('id', ParseIntPipe) id: number,
     @Body() request: UpdateRoleDto,
   ): Promise<Role> {
+    if (Object.keys(request).length == 0) {
+      return await this.get(id);
+    }
     const role = await this.roleService.update(id, request);
     return role;
   }

@@ -34,6 +34,17 @@ export class RoleRepository {
     return result;
   }
 
+  async fingByIdWithRelation(id: number): Promise<Role> {
+    const result = await this.typeormRepository.findOne({
+      where: {
+        id,
+      },
+      relations: ['users'],
+    });
+
+    return result;
+  }
+
   async getRoles(): Promise<Role[]> {
     const result = await this.typeormRepository.find();
     return result;

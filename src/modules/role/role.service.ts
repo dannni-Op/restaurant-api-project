@@ -33,13 +33,24 @@ export class RoleService {
 
   async update(id: number, request: UpdateRoleDto): Promise<Role> {
     const role = await this.get(id);
+    const roleExist = await this.roleRepository.findByName(request.name);
+    if (roleExist && role.name !== request.name)
+      throw new ConflictException(
+        `Role with name ${request.name} already exist.`,
+      );
 
     const result = await this.roleRepository.updateRole(id, request);
     return result;
   }
 
   async delete(id: number): Promise<boolean> {
-    const role = await this.get(id);
+    await this.get(id);
+
+    const role = await this.roleRepository.fingByIdWithRelation(id);
+    if (role.users.length != 0)
+      throw new ConflictException(
+        'The item cannot be deleted because it is referenced by other records.',
+      );
 
     const result = await this.roleRepository.deleteRole(id);
     return result;
