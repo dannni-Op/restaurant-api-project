@@ -15,12 +15,6 @@ export class Order {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ name: 'user_id', type: 'int', nullable: false })
-  userId: number;
-
-  @Column({ name: 'payment_id', type: 'int', nullable: false })
-  paymentId: number;
-
   @Column({ type: 'varchar', nullable: false })
   name: string;
 

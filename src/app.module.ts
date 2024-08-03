@@ -9,6 +9,7 @@ import { LogMiddleware } from './middlewares/log.middleware';
 import { RoleModule } from './modules/role/role.module';
 import { CategoryModule } from './modules/category/category.module';
 import { PaymentModule } from './modules/payment/payment.module';
+import { ProductModule } from './modules/product/product.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { PaymentModule } from './modules/payment/payment.module';
     RoleModule,
     CategoryModule,
     PaymentModule,
+    ProductModule,
   ],
   controllers: [],
   providers: [],
