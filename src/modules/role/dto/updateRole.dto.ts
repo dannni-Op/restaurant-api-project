@@ -1,7 +1,8 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString, MinLength } from 'class-validator';
 
 export class UpdateRoleDto {
   @IsOptional()
   @IsString()
+  @MinLength(1)
   name?: string;
 }

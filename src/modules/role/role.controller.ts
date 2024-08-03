@@ -24,25 +24,29 @@ export class RoleController {
   }
 
   @Get('/:id')
-  getRole(@Param('id', ParseIntPipe) id: number): string {
-    return 'get role by id';
+  async getRole(@Param('id', ParseIntPipe) id: number): Promise<Role> {
+    const role = await this.roleService.get(id);
+    return role;
   }
 
   @Get()
-  getAllRole(): string {
-    return 'get all role';
+  async getAll(): Promise<Role[]> {
+    const roles = await this.roleService.getAll();
+    return roles;
   }
 
   @Put('/:id')
-  update(
+  async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() request: UpdateRoleDto,
-  ): string {
-    return 'update role';
+  ): Promise<Role> {
+    const role = await this.roleService.update(id, request);
+    return role;
   }
 
   @Delete('/:id')
-  delete(@Param('id', ParseIntPipe) id: number): string {
-    return 'delete role';
+  async delete(@Param('id', ParseIntPipe) id: number): Promise<boolean> {
+    const result = await this.roleService.delete(id);
+    return result;
   }
 }
