@@ -49,7 +49,7 @@ export class RoleService {
     const role = await this.roleRepository.fingByIdWithRelation(id);
     if (role.users.length != 0)
       throw new ConflictException(
-        'The item cannot be deleted because it is referenced by other records.',
+        'The role cannot be deleted because it is referenced by other records.',
       );
 
     const result = await this.roleRepository.deleteRole(id);

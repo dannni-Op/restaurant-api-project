@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -51,8 +52,10 @@ export class Order {
   updatedAt: Date;
 
   @ManyToOne(() => Payment, (payment) => payment.orders)
+  @JoinColumn({ name: 'payment_id' })
   payment: Payment;
 
   @ManyToOne(() => User, (user) => user.orders)
+  @JoinColumn({ name: 'user_id' })
   user: User;
 }

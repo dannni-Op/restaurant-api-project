@@ -57,7 +57,7 @@ export class CategoryService {
     const category = await this.categoryRepository.findByIdWithRelations(id);
     if (category.products.length !== 0)
       throw new ConflictException(
-        'The item cannot be deleted because it is referenced by other records.',
+        'The category cannot be deleted because it is referenced by other records.',
       );
 
     const result = await this.categoryRepository.deleteCategory(id);

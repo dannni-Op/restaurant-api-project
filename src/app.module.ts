@@ -8,6 +8,7 @@ import { CommonModule } from './common/common.module';
 import { LogMiddleware } from './middlewares/log.middleware';
 import { RoleModule } from './modules/role/role.module';
 import { CategoryModule } from './modules/category/category.module';
+import { PaymentModule } from './modules/payment/payment.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { CategoryModule } from './modules/category/category.module';
     CommonModule,
     RoleModule,
     CategoryModule,
+    PaymentModule,
   ],
   controllers: [],
   providers: [],
