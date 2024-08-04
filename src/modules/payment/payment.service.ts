@@ -60,7 +60,7 @@ export class PaymentService {
 
     if (request.logo) {
       const pathExist = await this.paymentRepository.findLogoPath(request.logo);
-      if (pathExist)
+      if (pathExist && pathExist !== payment.logo)
         throw new ConflictException(
           `There are payments with the same name or logo image path.`,
         );
