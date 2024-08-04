@@ -80,4 +80,12 @@ export class ProductRepository {
     await this.repository.delete({ id });
     return true;
   }
+
+  async updateStock(id: number, stock: number): Promise<Product> {
+    await this.repository.update(id, {
+      stock,
+    });
+    const result = await this.findById(id);
+    return result;
+  }
 }

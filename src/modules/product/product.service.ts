@@ -1,5 +1,7 @@
 import {
+  BadRequestException,
   ConflictException,
+  HttpException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -120,5 +122,43 @@ export class ProductService {
 
     const result = await this.productRepository.deleteProduct(id);
     return result;
+  }
+
+  async addStock(id: number, stock: number): Promise<boolean> {
+    const product = await this.get(id);
+
+    if (stock < 0) {
+      //nilai munis (tolak)
+      throw new BadRequestException('Stock must be a non-negative number.');
+    }
+
+    const result = await this.productRepository.updateStock(
+      id,
+      product.stock + stock,
+    );
+    return true;
+  }
+
+  async reduceStock(id: number, stock: number): Promise<boolean> {
+    const product = await this.get(id);
+
+    if (stock < 0) {
+      //nilai munis (tolak)
+      throw new BadRequestException('Stock must be a non-negative number.');
+    }
+
+    if (product.stock == 0) {
+      //stock habis
+      throw new HttpException('Product stock is depleted.', 400);
+    } else if (product.stock < stock) {
+      //stock tidak cukup
+      throw new HttpException('Not enough stock available.', 400);
+    }
+
+    const result = await this.productRepository.updateStock(
+      id,
+      product.stock - stock,
+    );
+    return true;
   }
 }

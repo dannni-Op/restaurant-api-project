@@ -4,11 +4,13 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Payment } from './payment.entity';
 import { User } from './user.entity';
+import { OrderProduct } from './orderProduct.entity';
 
 @Entity({ name: 'orders' })
 export class Order {
@@ -52,4 +54,7 @@ export class Order {
   @ManyToOne(() => User, (user) => user.orders)
   @JoinColumn({ name: 'user_id' })
   user: User;
+
+  @OneToMany(() => OrderProduct, (orderProduct) => orderProduct.order)
+  orderProducts: OrderProduct[];
 }

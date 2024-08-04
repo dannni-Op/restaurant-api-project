@@ -25,9 +25,6 @@ export class User {
   @Column({ nullable: false, type: 'varchar' })
   password: string;
 
-  @Column({ nullable: false, type: 'int', name: 'role_id' })
-  roleId: number;
-
   @Column({ nullable: true, type: 'varchar', name: 'refresh_token' })
   refreshToken?: string;
 
@@ -51,6 +48,5 @@ export class User {
   role: Role;
 
   @OneToMany(() => Order, (order) => order.user)
-  @JoinColumn({ name: 'order_id' })
   orders: Order[];
 }

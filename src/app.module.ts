@@ -10,6 +10,9 @@ import { RoleModule } from './modules/role/role.module';
 import { CategoryModule } from './modules/category/category.module';
 import { PaymentModule } from './modules/payment/payment.module';
 import { ProductModule } from './modules/product/product.module';
+import { OrderModule } from './modules/order/order.module';
+import { UserModule } from './modules/user/user.module';
+import { OrderProductModule } from './modules/orderProduct/orderProduct.module';
 
 @Module({
   imports: [
@@ -24,6 +27,9 @@ import { ProductModule } from './modules/product/product.module';
     CategoryModule,
     PaymentModule,
     ProductModule,
+    OrderModule,
+    UserModule,
+    OrderProductModule,
   ],
   controllers: [],
   providers: [],

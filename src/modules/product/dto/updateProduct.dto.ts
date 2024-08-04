@@ -25,11 +25,6 @@ export class UpdateProductDto {
   @IsOptional()
   @IsNumber()
   @Min(0)
-  stock?: number;
-
-  @IsOptional()
-  @IsNumber()
-  @Min(0)
   price?: number;
 
   @IsOptional()
