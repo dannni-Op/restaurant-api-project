@@ -13,6 +13,10 @@ import { ProductModule } from './modules/product/product.module';
 import { OrderModule } from './modules/order/order.module';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { AtStrategy } from './strategies/at.strategy';
+import { APP_GUARD } from '@nestjs/core';
+import { AtGuard } from './guards/at.guard';
+import { RtStrategy } from './strategies/rt.strategy';
 
 @Module({
   imports: [
@@ -32,7 +36,14 @@ import { AuthModule } from './modules/auth/auth.module';
     AuthModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    AtStrategy,
+    RtStrategy,
+    {
+      provide: APP_GUARD,
+      useClass: AtGuard,
+    },
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
