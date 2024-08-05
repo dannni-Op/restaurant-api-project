@@ -1,16 +1,54 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Order } from 'src/entities/order.entity';
-import { Repository } from 'typeorm';
+import { OrderProduct } from 'src/entities/orderProduct.entity';
+import { Product } from 'src/entities/product.entity';
+import { OrderType } from 'src/types/order.type';
+import { DataSource, Repository } from 'typeorm';
 
 @Injectable()
 export class OrderRepository {
-  constructor(@InjectRepository(Order) private repository: Repository<Order>) {}
+  private repository = this.dataSource.getRepository(Order);
 
-  async createOrder(request: Order): Promise<Order> {
-    const order = this.repository.create(request);
-    const result = await this.repository.save(order);
-    return result;
+  constructor(private dataSource: DataSource) {}
+
+  async createOrder(
+    request: Order,
+    orderProducts: OrderProduct[],
+    qtyProducts: OrderType[], //nanti kalau bisa diganti typenya
+  ): Promise<Order> {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    //sebenarnya tidak sepenuhnya implementasi transaction
+    //hanya melakukan validasi diawal
+    try {
+      const order = await queryRunner.manager.save(Order, request);
+
+      //tambahkan order ke orderProduct
+      orderProducts = orderProducts.map((e) => {
+        e.order = order;
+        return e;
+      });
+
+      //update stock
+      await queryRunner.manager.save(OrderProduct, orderProducts);
+      await Promise.all(
+        qtyProducts.map(async (e) => {
+          await queryRunner.manager.update(Product, e.productId, {
+            stock: e.qty,
+          });
+        }),
+      );
+
+      await queryRunner.commitTransaction();
+      return order;
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+      throw err;
+    } finally {
+      queryRunner.release();
+    }
   }
 
   async findById(id: number): Promise<Order> {
@@ -18,6 +56,14 @@ export class OrderRepository {
       where: {
         id,
       },
+      relations: ['orderProducts'],
+    });
+
+    return result;
+  }
+
+  async findAll(): Promise<Order[]> {
+    const result = await this.repository.find({
       relations: ['orderProducts'],
     });
 

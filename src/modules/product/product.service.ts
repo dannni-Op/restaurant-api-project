@@ -124,41 +124,35 @@ export class ProductService {
     return result;
   }
 
-  async addStock(id: number, stock: number): Promise<boolean> {
+  async remainingStockAddition(id: number, quantity: number): Promise<number> {
     const product = await this.get(id);
 
-    if (stock < 0) {
+    if (quantity < 0) {
       //nilai munis (tolak)
-      throw new BadRequestException('Stock must be a non-negative number.');
+      throw new BadRequestException('Quantity must be a non-negative number.');
     }
 
-    const result = await this.productRepository.updateStock(
-      id,
-      product.stock + stock,
-    );
-    return true;
+    return product.stock + quantity;
   }
 
-  async reduceStock(id: number, stock: number): Promise<boolean> {
+  async remainingStockReduction(id: number, quantity: number): Promise<number> {
     const product = await this.get(id);
 
-    if (stock < 0) {
+    if (quantity < 0) {
       //nilai munis (tolak)
-      throw new BadRequestException('Stock must be a non-negative number.');
+      throw new BadRequestException('Quantity must be a non-negative number.');
+    } else if (quantity == 0) {
+      throw new BadRequestException('Quantity must be more than zero.');
     }
 
     if (product.stock == 0) {
       //stock habis
       throw new HttpException('Product stock is depleted.', 400);
-    } else if (product.stock < stock) {
+    } else if (product.stock < quantity) {
       //stock tidak cukup
       throw new HttpException('Not enough stock available.', 400);
     }
 
-    const result = await this.productRepository.updateStock(
-      id,
-      product.stock - stock,
-    );
-    return true;
+    return product.stock - quantity;
   }
 }

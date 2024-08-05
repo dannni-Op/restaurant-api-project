@@ -1,16 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Payment } from 'src/entities/payment.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { CreatePaymentDto } from './dto/createPayment.dto';
 import { PaymentType } from 'src/enums/paymentType.enum';
 import { UpdatePaymentDto } from './dto/updatePayment.dto';
 
 @Injectable()
 export class PaymentRepository {
-  constructor(
-    @InjectRepository(Payment) private repository: Repository<Payment>,
-  ) {}
+  private repository = this.dataSource.getRepository(Payment);
+
+  constructor(private dataSource: DataSource) {}
 
   async createPayment(request: CreatePaymentDto): Promise<Payment> {
     const payment = this.repository.create(request);
