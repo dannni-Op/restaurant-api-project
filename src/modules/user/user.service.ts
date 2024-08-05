@@ -1,5 +1,6 @@
 import {
   ConflictException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -35,6 +36,22 @@ export class UserService {
     user.password = request.password;
     user.role = role;
     const result = await this.userRepository.createUser(user);
+    return result;
+  }
+
+  async getByIdWithToken(id: number): Promise<User> {
+    const user = await this.userRepository.findByIdWithToken(id);
+    if (!user || !user.refreshToken)
+      throw new ForbiddenException(`Access denied.`);
+    return user;
+  }
+
+  async updateRefreshToken(
+    id: number,
+    request: string | null,
+  ): Promise<boolean> {
+    await this.get(id);
+    const result = await this.userRepository.updateRefreshToken(id, request);
     return result;
   }
 }
