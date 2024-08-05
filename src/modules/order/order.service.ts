@@ -38,15 +38,12 @@ export class OrderService {
       products.map(async (e) => {
         const product = await this.productService.get(e.productId);
 
-        //saat ini apabila qty 0 maka akan tetap membuat order
-        //kedepannya bisa dibuat validasi supaya minimal quantity 1
         const totalPriceCurrentProduct: number = product.price * e.qty;
         //jumlahkan seluruh product price
         if (totalPriceCurrentProduct !== 0)
           totalPrice += totalPriceCurrentProduct;
 
         //kurangi stock
-        //butuh transaction sepertinya
         const result = await this.productService.remainingStockReduction(
           e.productId,
           e.qty,
@@ -69,7 +66,6 @@ export class OrderService {
     );
 
     //total return
-    //lakukan cek disetiap looping reduce stock
     totalReturn += request.totalPaid - totalPrice;
     if (totalReturn < 0)
       throw new HttpException('Insufficient payment amount.', 400);

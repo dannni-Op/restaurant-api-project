@@ -1,25 +1,26 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Role } from 'src/entities/role.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { CreateRoleDto } from './dto/createRole.dto';
 import { UpdateRoleDto } from './dto/updateRole.dto';
 
 @Injectable()
 export class RoleRepository {
-  constructor(
-    @InjectRepository(Role)
-    private typeormRepository: Repository<Role>,
-  ) {}
+  private repository: Repository<Role>;
+
+  constructor(private readonly dataSource: DataSource) {
+    this.repository = dataSource.getRepository(Role);
+  }
 
   async createRole(request: CreateRoleDto): Promise<Role> {
-    const role = this.typeormRepository.create(request);
-    const result = await this.typeormRepository.save(role);
+    const role = this.repository.create(request);
+    const result = await this.repository.save(role);
     return result;
   }
 
   async findByName(name: string): Promise<Role | null> {
-    const result = await this.typeormRepository.findOneBy({
+    const result = await this.repository.findOneBy({
       name,
     });
 
@@ -27,7 +28,7 @@ export class RoleRepository {
   }
 
   async findById(id: number): Promise<Role | null> {
-    const result = await this.typeormRepository.findOneBy({
+    const result = await this.repository.findOneBy({
       id,
     });
 
@@ -35,7 +36,7 @@ export class RoleRepository {
   }
 
   async fingByIdWithRelation(id: number): Promise<Role> {
-    const result = await this.typeormRepository.findOne({
+    const result = await this.repository.findOne({
       where: {
         id,
       },
@@ -46,18 +47,18 @@ export class RoleRepository {
   }
 
   async getRoles(): Promise<Role[]> {
-    const result = await this.typeormRepository.find();
+    const result = await this.repository.find();
     return result;
   }
 
   async updateRole(id: number, request: UpdateRoleDto): Promise<Role> {
-    await this.typeormRepository.update({ id }, request);
+    await this.repository.update({ id }, request);
     const result = await this.findById(id);
     return result;
   }
 
   async deleteRole(id: number): Promise<boolean> {
-    await this.typeormRepository.delete({ id });
+    await this.repository.delete({ id });
     return true;
   }
 }

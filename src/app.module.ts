@@ -12,7 +12,7 @@ import { PaymentModule } from './modules/payment/payment.module';
 import { ProductModule } from './modules/product/product.module';
 import { OrderModule } from './modules/order/order.module';
 import { UserModule } from './modules/user/user.module';
-import { OrderProductModule } from './modules/orderProduct/orderProduct.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -29,7 +29,7 @@ import { OrderProductModule } from './modules/orderProduct/orderProduct.module';
     ProductModule,
     OrderModule,
     UserModule,
-    OrderProductModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
