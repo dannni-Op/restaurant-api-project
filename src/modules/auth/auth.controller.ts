@@ -28,8 +28,8 @@ export class AuthController {
   }
 
   @Delete('/logout')
-  async logout(): Promise<boolean> {
-    const result = await this.authService.logout(4);
+  async logout(@User() payload: JwtPayloadType): Promise<boolean> {
+    const result = await this.authService.logout(payload.sub);
     return result;
   }
 

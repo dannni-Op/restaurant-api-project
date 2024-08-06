@@ -12,7 +12,10 @@ import { Category } from 'src/entities/category.entity';
 import { CreateCategoryDto } from './dto/createCategory.dto';
 import { CategoryService } from './category.service';
 import { UpdateCategoryDto } from './dto/updateCategory.dto';
+import { Roles } from 'src/decorators/role.decorator';
 
+//yang utama user role admin akan bisa masuk semua
+@Roles('admin')
 @Controller('/categories')
 export class CategoryController {
   constructor(private categoryService: CategoryService) {}
@@ -23,12 +26,14 @@ export class CategoryController {
     return category;
   }
 
+  @Roles('cashier')
   @Get('/:id')
   async get(@Param('id', ParseIntPipe) id: number): Promise<Category> {
     const category = await this.categoryService.get(id);
     return category;
   }
 
+  @Roles('cashier')
   @Get()
   async getAll(): Promise<Category[]> {
     const categories = await this.categoryService.getAll();

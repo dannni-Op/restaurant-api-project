@@ -12,7 +12,9 @@ import { PaymentService } from './payment.service';
 import { CreatePaymentDto } from './dto/createPayment.dto';
 import { Payment } from 'src/entities/payment.entity';
 import { UpdatePaymentDto } from './dto/updatePayment.dto';
+import { Roles } from 'src/decorators/role.decorator';
 
+@Roles('admin')
 @Controller('/payments')
 export class PaymentController {
   constructor(private paymentService: PaymentService) {}
@@ -23,12 +25,14 @@ export class PaymentController {
     return payment;
   }
 
+  @Roles('cahiser')
   @Get('/:id')
   async get(@Param('id', ParseIntPipe) id: number): Promise<Payment> {
     const payment = await this.paymentService.get(id);
     return payment;
   }
 
+  @Roles('chasier')
   @Get()
   async getAll(): Promise<Payment[]> {
     const payments = await this.paymentService.getAll();

@@ -3,6 +3,7 @@ import {
   ForbiddenException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { UserRepository } from './user.repository';
 import { User } from 'src/entities/user.entity';
@@ -41,8 +42,8 @@ export class UserService {
 
   async getByIdWithToken(id: number): Promise<User> {
     const user = await this.userRepository.findByIdWithToken(id);
-    if (!user || !user.refreshToken)
-      throw new ForbiddenException(`Access denied.`);
+    if (!user) throw new ForbiddenException(`Access denied.`);
+    if (!user.refreshToken) throw new UnauthorizedException('Unauthorized.');
     return user;
   }
 

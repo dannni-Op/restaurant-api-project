@@ -17,6 +17,7 @@ import { AtStrategy } from './strategies/at.strategy';
 import { APP_GUARD } from '@nestjs/core';
 import { AtGuard } from './guards/at.guard';
 import { RtStrategy } from './strategies/rt.strategy';
+import { RoleGuard } from './guards/role.guard';
 
 @Module({
   imports: [
@@ -42,6 +43,10 @@ import { RtStrategy } from './strategies/rt.strategy';
     {
       provide: APP_GUARD,
       useClass: AtGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RoleGuard,
     },
   ],
 })

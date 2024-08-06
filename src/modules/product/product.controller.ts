@@ -12,10 +12,12 @@ import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/createProduct.dto';
 import { Product } from 'src/entities/product.entity';
 import { UpdateProductDto } from './dto/updateProduct.dto';
+import { Roles } from 'src/decorators/role.decorator';
 
 //Untuk product name dan sku itu unique
 //tidak mungkin ada nama yang sama
 //tidak mungkin ada sku yang sama
+@Roles('admin')
 @Controller('/products')
 export class ProductController {
   constructor(private productService: ProductService) {}
@@ -26,12 +28,14 @@ export class ProductController {
     return product;
   }
 
+  @Roles('cashier')
   @Get('/:id')
   async get(@Param('id', ParseIntPipe) id: number): Promise<Product> {
     const product = await this.productService.get(id);
     return product;
   }
 
+  @Roles('cashier')
   @Get()
   async getAll(): Promise<Product[]> {
     const products = await this.productService.getAll();
