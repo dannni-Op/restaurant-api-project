@@ -4,7 +4,6 @@ import { config } from './config/database.config';
 import { ConfigModule } from '@nestjs/config';
 import { WinstonModule } from 'nest-winston';
 import { winstonConfig } from './config/winston.config';
-import { CommonModule } from './common/common.module';
 import { LogMiddleware } from './middlewares/log.middleware';
 import { RoleModule } from './modules/role/role.module';
 import { CategoryModule } from './modules/category/category.module';
@@ -27,7 +26,6 @@ import { RoleGuard } from './guards/role.guard';
       envFilePath: ['.env'],
     }),
     WinstonModule.forRootAsync(winstonConfig),
-    CommonModule,
     RoleModule,
     CategoryModule,
     PaymentModule,

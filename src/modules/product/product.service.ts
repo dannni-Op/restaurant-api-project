@@ -116,9 +116,11 @@ export class ProductService {
   async delete(id: number): Promise<boolean> {
     await this.get(id);
 
-    //cek apakah product digunakan ditable lain (belum dicek)
-    //jika digunakan maka aksi hapus tidak dilanjutkan
-    //respon error
+    const product = await this.productRepository.findByIdWithOrderRelation(id);
+    if (product.orderProducts.length > 0)
+      throw new ConflictException(
+        'The Product cannot be deleted because it is referenced by other records.',
+      );
 
     const result = await this.productRepository.deleteProduct(id);
     return result;

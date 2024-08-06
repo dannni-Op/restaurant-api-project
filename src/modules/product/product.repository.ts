@@ -88,4 +88,14 @@ export class ProductRepository {
     const result = await this.findById(id);
     return result;
   }
+
+  async findByIdWithOrderRelation(id: number): Promise<Product | null> {
+    const result = await this.repository.findOne({
+      where: {
+        id,
+      },
+      relations: ['orderProducts'],
+    });
+    return result;
+  }
 }
