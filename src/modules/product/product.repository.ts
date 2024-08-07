@@ -5,6 +5,7 @@ import { DataSource, Repository } from 'typeorm';
 import { CreateProductDto } from './dto/createProduct.dto';
 import { Category } from 'src/entities/category.entity';
 import { UpdateProductDto } from './dto/updateProduct.dto';
+import { SearchOptionType } from 'src/types/searchOption.type';
 
 @Injectable()
 export class ProductRepository {
@@ -56,10 +57,17 @@ export class ProductRepository {
     return result;
   }
 
-  async findAll(): Promise<Product[]> {
+  async findAll(opt: SearchOptionType): Promise<Product[]> {
     const result = await this.repository.find({
       relations: ['category'],
+      take: opt.take,
+      skip: opt.skip,
     });
+    return result;
+  }
+
+  async countProducts(): Promise<number> {
+    const result = await this.repository.count();
     return result;
   }
 

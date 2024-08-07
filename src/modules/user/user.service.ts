@@ -29,8 +29,10 @@ export class UserService {
     if (emailExist) throw new ConflictException(`Email must be unique.`);
 
     request.password = await bcrypt.hash(request.password, 10);
-    const role = await this.roleRepository.findByName('cashier');
-    if (!role) throw new NotFoundException(`Default role not found.`);
+    let role = await this.roleRepository.findByName('cashier');
+    if (!role) {
+      role = await this.roleRepository.createRole({ name: 'cashier' });
+    }
     const user = new User();
     user.name = request.name;
     user.email = request.email;

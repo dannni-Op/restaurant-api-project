@@ -7,12 +7,15 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/createProduct.dto';
 import { Product } from 'src/entities/product.entity';
 import { UpdateProductDto } from './dto/updateProduct.dto';
 import { Roles } from 'src/decorators/role.decorator';
+import { SearchProduct } from './dto/searchProduct.dto';
+import { ResponsePaging } from 'src/types/responsePaging.type';
 
 //Untuk product name dan sku itu unique
 //tidak mungkin ada nama yang sama
@@ -37,8 +40,19 @@ export class ProductController {
 
   @Roles('cashier')
   @Get()
-  async getAll(): Promise<Product[]> {
-    const products = await this.productService.getAll();
+  async getAll(
+    @Query('name') name: string,
+    @Query('category') category: string,
+    @Query('page') page?: number,
+    @Query('size') size?: number,
+  ): Promise<ResponsePaging<Product[]>> {
+    const search: SearchProduct = {
+      name,
+      category,
+      page: page ? page : 1,
+      size: size ? size : 5,
+    };
+    const products = await this.productService.getAll(search);
     return products;
   }
 

@@ -94,8 +94,8 @@ export class CreateTableOrders1722505081545 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropForeignKey('orders', 'fk_orders_userId');
-    await queryRunner.dropForeignKey('orders', 'fk_orders_paymentId');
+    // await queryRunner.dropForeignKey('orders', 'fk_orders_userId');
+    // await queryRunner.dropForeignKey('orders', 'fk_orders_paymentId');
     await queryRunner.dropTable('orders', true);
   }
 }

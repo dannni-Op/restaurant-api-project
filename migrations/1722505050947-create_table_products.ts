@@ -80,7 +80,7 @@ export class CreateTableProducts1722505050947 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropForeignKey('products', 'fk_products_categoryId');
+    // await queryRunner.dropForeignKey('products', 'fk_products_categoryId');
     await queryRunner.dropTable('products', true);
   }
 }

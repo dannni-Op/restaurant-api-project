@@ -10,6 +10,9 @@ import { CreateProductDto } from './dto/createProduct.dto';
 import { Product } from 'src/entities/product.entity';
 import { CategoryRepository } from '../category/category.repository';
 import { UpdateProductDto } from './dto/updateProduct.dto';
+import { SearchProduct } from './dto/searchProduct.dto';
+import { SearchOptionType } from 'src/types/searchOption.type';
+import { ResponsePaging } from 'src/types/responsePaging.type';
 
 @Injectable()
 export class ProductService {
@@ -61,9 +64,26 @@ export class ProductService {
     return product;
   }
 
-  async getAll(): Promise<Product[]> {
-    const products = await this.productRepository.findAll();
-    return products;
+  async getAll(search: SearchProduct): Promise<ResponsePaging<Product[]>> {
+    const skip = (search.page - 1) * search.size;
+    const take = search.size;
+
+    const opt: SearchOptionType = {
+      take,
+      skip,
+    };
+    const products = await this.productRepository.findAll(opt);
+    const productsCount = await this.productRepository.countProducts();
+
+    const totalPage = Math.ceil(productsCount / search.size);
+    return {
+      data: products,
+      paging: {
+        totalPage,
+        currentPage: search.page,
+        size: search.size,
+      },
+    };
   }
 
   async update(id: number, request: UpdateProductDto): Promise<Product> {

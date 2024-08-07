@@ -81,14 +81,14 @@ export class CreateTableOrderProduct1722505095719
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropForeignKey(
-      'order_product',
-      'fk_orderProduct_orderId',
-    );
-    await queryRunner.dropForeignKey(
-      'order_product',
-      'fk_orderProduct_productId',
-    );
+    // await queryRunner.dropForeignKey(
+    //   'order_product',
+    //   'fk_orderProduct_orderId',
+    // );
+    // await queryRunner.dropForeignKey(
+    //   'order_product',
+    //   'fk_orderProduct_productId',
+    // );
     await queryRunner.dropTable('order_product', true);
   }
 }
