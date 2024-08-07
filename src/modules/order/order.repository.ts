@@ -3,6 +3,7 @@ import { Order } from 'src/entities/order.entity';
 import { OrderProduct } from 'src/entities/orderProduct.entity';
 import { Product } from 'src/entities/product.entity';
 import { OrderType } from 'src/types/order.type';
+import { SearchOptionType } from 'src/types/searchOption.type';
 import { DataSource, Repository } from 'typeorm';
 
 @Injectable()
@@ -62,11 +63,18 @@ export class OrderRepository {
     return result;
   }
 
-  async findAll(): Promise<Order[]> {
+  async findAll(opt: SearchOptionType): Promise<Order[]> {
     const result = await this.repository.find({
       relations: ['orderProducts'],
+      take: opt.take,
+      skip: opt.skip,
     });
 
+    return result;
+  }
+
+  async count(): Promise<number> {
+    const result = await this.repository.count({});
     return result;
   }
 }

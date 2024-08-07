@@ -6,7 +6,7 @@ import {
   MinLength,
 } from 'class-validator';
 
-export class SearchProduct {
+export class SearchOrder {
   @IsOptional()
   @IsString()
   @MinLength(1)

@@ -41,18 +41,16 @@ export class ProductController {
   @Roles('cashier')
   @Get()
   async getAll(
-    @Query('name') name: string,
-    @Query('category') category: string,
+    @Query('search') search: string,
     @Query('page') page?: number,
     @Query('size') size?: number,
   ): Promise<ResponsePaging<Product[]>> {
-    const search: SearchProduct = {
-      name,
-      category,
+    const searchRequest: SearchProduct = {
+      search,
       page: page ? page : 1,
       size: size ? size : 5,
     };
-    const products = await this.productService.getAll(search);
+    const products = await this.productService.getAll(searchRequest);
     return products;
   }
 

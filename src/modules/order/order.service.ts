@@ -8,6 +8,9 @@ import { PaymentService } from '../payment/payment.service';
 import { UserService } from '../user/user.service';
 import { OrderProduct } from 'src/entities/orderProduct.entity';
 import { OrderType } from 'src/types/order.type';
+import { SearchOrder } from './dto/searchOrder.dto';
+import { ResponsePaging } from 'src/types/responsePaging.type';
+import { SearchOptionType } from 'src/types/searchOption.type';
 
 @Injectable()
 export class OrderService {
@@ -94,8 +97,27 @@ export class OrderService {
     return order;
   }
 
-  async getAll(): Promise<Order[]> {
-    const orders = await this.orderRepository.findAll();
-    return orders;
+  async getAll(search: SearchOrder): Promise<ResponsePaging<Order[]>> {
+    const skip = (search.page - 1) * search.size;
+    const take = search.size;
+
+    const opt: SearchOptionType = {
+      skip,
+      take,
+    };
+
+    const orders = await this.orderRepository.findAll(opt);
+    const countOrders = await this.orderRepository.count();
+
+    const totalPage = Math.ceil(countOrders / search.size);
+
+    return {
+      data: orders,
+      paging: {
+        totalPage,
+        currentPage: search.page,
+        size: search.size,
+      },
+    };
   }
 }
