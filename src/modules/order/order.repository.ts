@@ -63,8 +63,24 @@ export class OrderRepository {
     return result;
   }
 
-  async findAll(search: string, opt: SearchOptionType): Promise<Order[]> {
-    if (search) {
+  async findAll(keywoard: string, opt: SearchOptionType): Promise<Order[]> {
+    if (keywoard) {
+      const result = await this.repository
+        .createQueryBuilder('orders')
+        .innerJoin('orders.user', 'users')
+        .addSelect('users.id')
+        .addSelect('users.name')
+        .addSelect('users.email')
+        .innerJoin('orders.orderProducts', 'order_product')
+        .innerJoin('order_product.product', 'products')
+        .addSelect('order_product.id')
+        .addSelect('products.id')
+        .addSelect('products.name')
+        .where('orders.name ilike :name', { name: `%${keywoard}%` })
+        .orWhere('users.name ilike :name', { name: `%${keywoard}%` })
+        .orWhere('products.name ilike :name', { name: `%${keywoard}%` })
+        .getMany();
+      return result;
     }
 
     const result = await this.repository.find({
@@ -75,7 +91,19 @@ export class OrderRepository {
 
     return result;
   }
-  async count(): Promise<number> {
+  async count(keywoard: string): Promise<number> {
+    if (keywoard) {
+      const result = await this.repository
+        .createQueryBuilder('orders')
+        .innerJoinAndSelect('orders.user', 'users')
+        .innerJoin('orders.orderProducts', 'order_product')
+        .innerJoinAndSelect('order_product.product', 'products')
+        .where('orders.name ilike :name', { name: `%${keywoard}%` })
+        .orWhere('users.name ilike :name', { name: `%${keywoard}%` })
+        .orWhere('products.name ilike :name', { name: `%${keywoard}%` })
+        .getCount();
+      return result;
+    }
     const result = await this.repository.count({});
     return result;
   }
