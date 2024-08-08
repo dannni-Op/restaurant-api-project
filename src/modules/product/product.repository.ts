@@ -57,7 +57,20 @@ export class ProductRepository {
     return result;
   }
 
-  async findAll(opt: SearchOptionType): Promise<Product[]> {
+  async findAll(keywoard: string, opt: SearchOptionType): Promise<Product[]> {
+    if (keywoard) {
+      const query = this.repository
+        .createQueryBuilder('products')
+        .innerJoinAndSelect('products.category', 'categories')
+        .where('categories.name ilike :name', { name: `%${keywoard}%` })
+        .orWhere('products.name ilike :name', { name: `%${keywoard}%` })
+        .orderBy('products.createdAt', 'ASC')
+        .skip(opt.skip)
+        .take(opt.take);
+      const result = await query.getMany();
+      return result;
+    }
+
     const result = await this.repository.find({
       relations: ['category'],
       take: opt.take,
@@ -66,7 +79,16 @@ export class ProductRepository {
     return result;
   }
 
-  async countProducts(): Promise<number> {
+  async countProducts(keywoard: string): Promise<number> {
+    if (keywoard) {
+      const result = await this.repository
+        .createQueryBuilder('products')
+        .innerJoinAndSelect('products.category', 'categories')
+        .where('categories.name like :name', { name: `%${keywoard}%` })
+        .orWhere('products.name ilike :name', { name: `%${keywoard}%` })
+        .getCount();
+      return result;
+    }
     const result = await this.repository.count();
     return result;
   }

@@ -106,7 +106,7 @@ export class OrderService {
       take,
     };
 
-    const orders = await this.orderRepository.findAll(opt);
+    const orders = await this.orderRepository.findAll(search.search, opt);
     const countOrders = await this.orderRepository.count();
 
     const totalPage = Math.ceil(countOrders / search.size);

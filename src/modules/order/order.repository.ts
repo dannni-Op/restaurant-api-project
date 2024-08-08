@@ -63,7 +63,10 @@ export class OrderRepository {
     return result;
   }
 
-  async findAll(opt: SearchOptionType): Promise<Order[]> {
+  async findAll(search: string, opt: SearchOptionType): Promise<Order[]> {
+    if (search) {
+    }
+
     const result = await this.repository.find({
       relations: ['orderProducts'],
       take: opt.take,
@@ -72,7 +75,6 @@ export class OrderRepository {
 
     return result;
   }
-
   async count(): Promise<number> {
     const result = await this.repository.count({});
     return result;

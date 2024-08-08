@@ -72,8 +72,10 @@ export class ProductService {
       take,
       skip,
     };
-    const products = await this.productRepository.findAll(opt);
-    const productsCount = await this.productRepository.countProducts();
+    const products = await this.productRepository.findAll(search.search, opt);
+    const productsCount = await this.productRepository.countProducts(
+      search.search,
+    );
 
     const totalPage = Math.ceil(productsCount / search.size);
     return {
